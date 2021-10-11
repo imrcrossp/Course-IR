@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<title>Home</title>
+	<link rel="stylesheet" href="{% static 'css/online/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/font.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/fonts/simple-line-icons.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+</head>
+
+<body id="page-top"><a class="menu-toggle rounded"><i class="fa fa-bars"></i></a>
+	<nav class="navbar navbar-light navbar-expand" id="sidebar-wrapper">
+		<div class="container"><button data-bs-toggle="collapse" class="navbar-toggler d-none" data-bs-target="#"></button>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav sidebar-nav" id="sidebar-nav">
+					<li class="nav-item sidebar-brand"><a class="nav-link active js-scroll-trigger" href="#page-top">IIR</a></li>
+					<li class="nav-item sidebar-nav-item"><a class="nav-link js-scroll-trigger" href="#page-top">Home</a></li>
+					
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<header class="d-flex masthead" style="background-image:url({% static 'assets/img/bg-masthead.jpg' %});">
+		<div class="container my-auto text-center">
+			<h1 class="mb-3">IIR</h1>
+			<h3 class="mb-2"><em>Choose Files. (.xml or .json)</em></h3>
+					<!-- <a class="btn btn-primary btn-xl js-scroll-trigger" role="button" >
+						Upload
+					</a> -->
+			<label class="btn btn-primary btn-sm js-scroll-trigger">
+				<!-- 首先，將 input 上傳按鈕包在label之中，並將input按鈕隱藏 -->
+				<!-- label 加了幾個 class 可以自動產生漂亮美觀的按鈕 -->
+				<input id="upload_files" style="display:none;" multiple="true" onchange="handleFiles(this.files)" type="file" accept=".json, .xml">
+				<i class="fa fa-file-text-o fa-2x" ></i>
+				<font size="3" face="微軟正黑體"><b>上傳檔案</b></font>
+			</label>
+			<div class="overlay"></div>
+		</div>
+	</header>
+	<section id="services" class="content-section bg-primary text-white text-center" style="display: none;">
+		<div class="container">
+			<div class="content-section-heading">
+				<h3 class="text-secondary mb-0">Services</h3>
+				<h2 class="mb-3">Here we go!</h2>
+			</div>
+		</div>
+		<div class="container">
+			<div class="table-responsive table-striped table-bordered">
+				<table class="table" frame="void" id="ftb"> <!-- 製作動態表格 ftb = file table-->
+					<tbody>
+						<tr id="ftb_tr">
+							<!-- add some file block -->
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="container">
+			<p class="offset-7">
+				搜尋：
+				<input type="text" id="search_text" style="border: 2px dashed; width: 140px" >
+			</p>
+			<div style="height: 400px; overflow: auto;">
+
+				<!-- for search -->
+				<table class="table table-responsive table-striped table-bordered table-success table-hover" style="overflow: scroll; table-layout:fixed; display: none;
+				 word-wrap:break-word" frame="void" id = "found_json"> 
+				 <!-- 製作動態表格 txt_found = result table -->
+					<tbody id = "txt_body">
+						<tr>
+							<th style="width: 100px;"> ID</th>
+							<th colspan="8"> Text</th>
+						</tr>
+					</tbody>
+
+				</table>
+
+				<table class="table table-responsive table-striped table-bordered table-success table-hover" style="overflow: scroll; table-layout:fixed; display: none;
+				 word-wrap:break-word" frame="void" id = "found_xml"> 
+				 <!-- 製作動態表格 txt_found = result table -->
+					<tbody id = "txt_body">
+						<tr>
+							<th style="width: 100px;"></th>
+							<th colspan="8"></th>
+						</tr>
+					</tbody>
+
+				</table>
+
+				<!-- for json -->
+				<table class="table table-responsive table-striped table-bordered table-success table-hover" style="overflow: scroll; table-layout:fixed; display: none;
+				 word-wrap:break-word" frame="void" id = "load_json"> 
+				 <!-- 製作動態表格 load_json = result table -->
+					<tbody id = "json_body">
+						<tr>
+							<th style="width: 100px;"> ID</th>
+							<th colspan="8"> Text</th>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- for xml -->
+				<table class="table table-responsive table-striped table-bordered table-success table-hover" style="overflow: scroll; table-layout:fixed;
+				 word-wrap:break-word; display:none" frame="void" id = "load_xml">
+				 <!-- 製作動態表格 load_xml = result table -->
+					<tbody id = "xml_body">
+						<tr>
+							<th style="width: 100px;"></th>
+							<th colspan="8"></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>			
+		</div>		
+	</section>
+	<section>
+
+	</section>
+	<footer class="footer text-center">
+		<div class="container">
+			<ul class="list-inline mb-5">
+				<li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://www.facebook.com/imrcrossp/" target="_blank"><i class="icon-social-facebook"></i></a></li>
+				<li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://github.com/imrcrossp" target="_black"><i class="icon-social-github"></i></a></li>
+			</ul>
+			<p class="text-muted mb-0 small">Copyright &nbsp;© Yen's 2021</p>
+		</div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
+	</footer>
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/stylish-portfolio.js' %}"></script>
+	<script src="{% static 'js/scripts.js' %}"></script>
+</body>
+
+</html>

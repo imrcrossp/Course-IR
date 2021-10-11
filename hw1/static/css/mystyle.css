@@ -1,0 +1,27 @@
+.buttonjson {
+  border-radius: 12px;
+  background-color: #F37021;
+  color: white;
+  transition-duration: 0.4s;
+  border:2px #F37021;
+}
+
+.buttonjson:hover {
+  background-color: #FFFFFF;
+  border:2px solid #F37021;
+  color: black;
+}
+
+.buttonxml {
+  border-radius: 12px;
+  background-color: #003153;
+  color: white;
+  transition-duration: 0.4s;
+  border:2px #003153;
+}
+
+.buttonxml:hover {
+  background-color: #FFFFFF;
+  border:2px solid #003153;
+  color: black;
+}
