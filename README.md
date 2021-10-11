@@ -3,9 +3,12 @@
 > To perform document retrieval according to specified keyword(s) and display in an easily visualization way.
 > - calculate the document statistics ( number of characters, number of words, number of sentences(EOS))
 
+## 實作方式
+> javascript 為主，用動態的方式載入文件、尋找關鍵字。
+
 ## 測試方式
 > - 安裝 django
-> -  python manage.py migrate
+> -  python manage.py migrate 
 > -  python manage.py runserver
 
 ## 待解決問題:
