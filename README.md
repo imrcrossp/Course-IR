@@ -4,7 +4,7 @@
 > - calculate the document statistics ( number of characters, number of words, number of sentences(EOS))
 
 ## 實作方式
-> javascript 為主，用動態的方式載入文件、尋找關鍵字。
+> javascript 為主，用動態方式建立表格處理文件、尋找關鍵字。
 
 ## 測試方式
 > - 安裝 django
