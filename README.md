@@ -11,5 +11,5 @@
 > -  python manage.py migrate 
 > -  python manage.py runserver
 
-## 待解決問題:
+## 待解決問題
 > - 測試中 Chrome 無法正常運作 oninput，故用 change 代替。
