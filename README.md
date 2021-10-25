@@ -18,10 +18,10 @@
 
 ## Try!
 >>由於 nltk 安裝較麻煩，需要先確認是否有package
->>>\> pip3 install nltk
->>>\> python3
->>>\>>> import nltk
->>>\>>> nltk.download("popular")
+>>\> pip3 install nltk
+>>\> python3
+>>\>>> import nltk
+>>\>>> nltk.download("popular")
 > - 安裝 django
 > -  python manage.py migrate 
 > -  python manage.py runserver [ip:port]
