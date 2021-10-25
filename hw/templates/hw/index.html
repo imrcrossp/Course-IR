@@ -5,7 +5,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-	<title>Home</title>
+	<title>IR Homework</title>
+	<link rel="icon" href="{% static 'assets/favicon.ico' %}"size="any" type="image/svg+xml">
 	<link rel="stylesheet" href="{% static 'css/online/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/font.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
@@ -18,7 +19,7 @@
 		<div class="container"><button data-bs-toggle="collapse" class="navbar-toggler d-none" data-bs-target="#"></button>
 			<div class="collapse navbar-collapse">
 				<ul class="navbar-nav sidebar-nav" id="sidebar-nav">
-					<li class="nav-item sidebar-brand"><a class="nav-link active js-scroll-trigger" href="#page-top">IIR</a></li>
+					<li class="nav-item sidebar-brand"><a class="nav-link active js-scroll-trigger" href="#page-top">IR</a></li>
 					<li class="nav-item sidebar-nav-item"><a class="nav-link js-scroll-trigger" href="#page-top">Home</a></li>
 					
 				</ul>
@@ -35,11 +36,29 @@
 			<label class="btn btn-primary btn-sm js-scroll-trigger">
 				<!-- 首先，將 input 上傳按鈕包在label之中，並將input按鈕隱藏 -->
 				<!-- label 加了幾個 class 可以自動產生漂亮美觀的按鈕 -->
-				<input id="upload_files" style="display:none;" multiple="true" onchange="handleFiles(this.files)" type="file" accept=".json, .xml">
+				<input id="upload_files" style="display:none;" multiple="true" onchange="handleFiles()" type="file" accept=".json, .xml">
 				<i class="fa fa-file-text-o fa-2x" ></i>
 				<font size="3" face="微軟正黑體"><b>上傳檔案</b></font>
 			</label>
-			<div class="overlay"></div>
+			<hr/>
+			<div class="row">
+				<div class="col">
+					<!-- 需要修改 onchange 的部分 -->
+					<label class="btn btn-primary btn-sm js-scroll-trigger">
+						<input id="upload_to_server" style="display:none;" multiple="true" onchange="" type="file" accept=".json, .xml">
+						<i class="fa fa-cloud-upload fa-xs" ></i>
+						<font size="2" face="微軟正黑體"><b>Server</b></font>
+					</label>
+				</div>
+				<div class="col">
+					<!-- 需要修改 onchange 的部分 -->
+					<label class="btn btn-primary btn-sm js-scroll-trigger">
+						<input id="upload_to_server" style="display:none;" onclick="load_default()">
+						<i class="fa fa-cloud-download fa-xs" ></i>
+						<font size="2" face="微軟正黑體"><b>Default Data</b></font>
+					</label>
+				</div>
+			</div>
 		</div>
 	</header>
 	<section id="services" class="content-section bg-primary text-white text-center" style="display: none;">
@@ -63,7 +82,7 @@
 		<div class="container">
 			<p class="offset-7">
 				搜尋：
-				<input type="text" id="search_text" style="border: 2px dashed; width: 140px" >
+				<input type="text" id="search_text" style="border: 2px dashed; width: 140px" oninput="chgtxt(this.value)">
 			</p>
 			<div style="height: 400px; overflow: auto;">
 
@@ -118,9 +137,55 @@
 			</div>			
 		</div>		
 	</section>
-	<section>
+
+
+	<section class="callout" style="background:linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), url(&quot;{% static 'assets/img/bg-callout.jpg' %}&quot;);background-position:center center;background-repeat:no-repeat;background-size:cover; padding-top: 50px; padding-bottom: 50px;">
+		<div class='row'>
+			<div class='col-md-6 col-ms-12' >
+				<div class="container">
+					<p align="center" style="">
+						<input type="text" id="adv_search_text" style="border: 3px dashed; width: 150px">
+						<label class="btn btn-primary btn-sm js-scroll-trigger">
+							<input style="display:none;"onclick="adv_search()">
+							<font size="2" face="微軟正黑體"><b>搜尋</b></font>
+						</label>
+					</p>
+					<p align="center">
+						<button id="pres" type="button" class="btn btn-secondary btn-sm" onclick="minuslow()">Pre</button>
+						<button id="next" type="button" class="btn btn-secondary btn-sm" onclick="addlow()">Next</button>
+					</p>
+					<div id="adv_search" style="height: 400px; overflow: auto; ">
+						<table id="adv_search_table" class="table table-striped" style="width:100%">
+							<thead><td>Search Result</td></thead>
+							<tbody>
+	 							
+	 						</tbody>
+	 						<tfoot><td></td></tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class='col-md-6 col-ms-12'>
+				<div class='row'>
+					<div class='col'>
+						
+					</div>
+					<div class='col'>
+						
+					</div>
+					<div class='col'>
+					</div>
+				</div>
+				<div class="container" style="padding-top: 50px;">
+					<div style="height: 400px; overflow: auto;" id='svgblock'>
+						
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</section>
+
 	<footer class="footer text-center">
 		<div class="container">
 			<ul class="list-inline mb-5">
@@ -128,12 +193,17 @@
 				<li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://github.com/imrcrossp" target="_black"><i class="icon-social-github"></i></a></li>
 			</ul>
 			<p class="text-muted mb-0 small">Copyright &nbsp;© Yen's 2021</p>
-		</div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
+		</div>
+		<a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
 	</footer>
 	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.xkcd@1/dist/chart.xkcd.min.js"></script>
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'js/stylish-portfolio.js' %}"></script>
-	<script src="{% static 'js/scripts.js' %}"></script>
+	<script src="{% static 'js/service.js' %}"></script>
+	<script src="{% static 'js/csrf.js' %}"></script>
+	<script src="{% static 'js/server.js' %}"></script>
+	
 </body>
 
 </html>
