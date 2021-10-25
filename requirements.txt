@@ -1,2 +1,6 @@
 Django == 3.2.8
+<<<<<<< HEAD
 python-dotenv
+=======
+python-dotenv
+>>>>>>> 1747c951fc95a542fed3468c11c6134320c353a4
