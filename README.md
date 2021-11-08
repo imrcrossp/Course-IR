@@ -24,7 +24,9 @@
 >>>\>>> nltk.download("popular")
 > - 安裝 django
 > -  python manage.py migrate 
-> -  python manage.py runserver [ip:port]
+> -  python manage.py runserver [0.0.0.0:port]
+## Generate key
+> ./init_key
 
 ## Problems? Bugs?
 > Only edit distance and substring matching can't deal with the partial matching problem well.
