@@ -27,6 +27,8 @@
 > -  python manage.py runserver [0.0.0.0:port]
 ## Generate key
 > ./init_key
+## Other setting
+> You could change file database and statistical data, all data are saved in /hw/static/assets/docs.
 
 ## Problems? Bugs?
 > Only edit distance and substring matching can't deal with the partial matching problem well.
