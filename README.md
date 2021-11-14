@@ -27,6 +27,7 @@
 >>>\>>> nltk.download("popular")<br>
 >>>\> pip install -r requirements.txt
 > - 安裝 django
+> - ./init_key
 > -  python manage.py migrate 
 > -  python manage.py runserver [ip:port]
 
