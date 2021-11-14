@@ -1,4 +1,5 @@
 Django == 3.2.8
 python-dotenv
 pandas
-
+scikit-learn
+gensim
