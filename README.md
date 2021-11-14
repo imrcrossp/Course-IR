@@ -24,7 +24,7 @@
 >>>\> pip3 install nltk <br>
 >>>\> python3 <br>
 >>>\>>> import nltk <br>
->>>\>>> nltk.download("popular")
+>>>\>>> nltk.download("popular")<br>
 >>>\> pip install -r requirements.txt
 > - 安裝 django
 > -  python manage.py migrate 
