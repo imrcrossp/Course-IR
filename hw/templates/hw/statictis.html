@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>IR Homework</title>
+    <link rel="stylesheet" href="{% static 'css/online/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="icon" href="{% static 'assets/favicon.ico' %}"size="any" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/simple-line-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+</head>
+
+<body id="page-top">
+    <header>
+        <div id="wrapper">
+            <div class="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                    <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                        <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                            <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search" action="/hw/stat">
+                                <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..." name="text"><button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button></div>
+
+                            </form>
+                    </nav>        
+                    <div class="container-fluid">
+                        <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                            <h3 class="text-dark mb-0" style="margin-left: 0.5em">{{ txt }}</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card shadow border-start-success py-2">
+                                    <div class="card-header py-3">
+                                        <h6 class="text-primary fw-bold m-0">Result</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        {% for info in info %}
+                                            <h4 class="small fw-bold">{{ info.0 }}<span class="float-end">{{ info.1 }}</span></h4>
+                                            <div class="progress mb-2">
+                                                <div class="progress-bar {{ info.2 }}" aria-valuenow="{{ info.1 }}"aria-valuemin="0" aria-valuemax="100" style="width: {{ info.3 }}%;">
+                                                <span class="visually-hidden">{{ info.1 }}</span>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 offset-lg-0 mb-4">
+                                <div class="card shadow border-start-warning py-2" style="padding-top: 13px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="text-primary fw-bold m-0">Overview</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-area">
+                                            <img width = "100%" height="100%" src="{{ img }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="row" style="margin-top: 40px;">
+                                    <div class="col-lg-4 mb-4">
+                                        <div class="card textwhite bg-primary text-white shadow">
+                                            <div class="card-body">
+                                                <p class="m-0">Primary</p>
+                                                <p class="text-white-50 small m-0">#4e73df</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 mb-4">
+                                        <div class="card textwhite bg-success text-white shadow">
+                                            <div class="card-body">
+                                                <p class="m-0">Success</p>
+                                                <p class="text-white-50 small m-0">#1cc88a</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 mb-4">
+                                        <div class="card textwhite bg-info text-white shadow">
+                                            <div class="card-body">
+                                                <p class="m-0">Info</p>
+                                                <p class="text-white-50 small m-0">#36b9cc</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7 col-xl-8">
+                                <div class="card shadow mb-4"></div>
+                            </div>
+                            <div class="col-lg-5 col-xl-4">
+                                <div class="card shadow mb-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <footer class="footer text-center" style="padding-top: 5px;">
+            <div class="container">
+                <ul class="list-inline mb-2">
+                    <li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://www.facebook.com/imrcrossp/" target="_blank"><i class="icon-social-facebook"></i></a></li>
+                    <li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://github.com/imrcrossp" target="_black"><i class="icon-social-github"></i></a></li>
+                </ul>
+                <p class="text-muted mb-0 small">Copyright &nbsp;© Yen's 2021</p>
+            </div>
+            <a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
+        </footer>
+    </section>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/bs-init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/stylish-portfolio.js' %}"></script>
+</body>
+
+</html>

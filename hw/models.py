@@ -10,7 +10,34 @@ import os
 import math
 import string
 import ast
-# Create your models here.
+import gensim.models
+from gensim import utils
+from sklearn.decomposition import IncrementalPCA
+from sklearn.manifold import TSNE
+
+## Init
+def reduce_dimensions(model):
+    num_dimensions = 2  # final num dimensions (2D, 3D, etc)
+
+    # extract the words & their vectors, as numpy arrays
+    vectors = np.asarray(model.wv.vectors)
+    labels = np.asarray(model.wv.index_to_key)  # fixed-width numpy strings
+
+    # reduce using t-SNE
+    tsne = TSNE(n_components=num_dimensions, random_state=0)
+    vectors = tsne.fit_transform(vectors)
+
+    x_vals = [v[0] for v in vectors]
+    y_vals = [v[1] for v in vectors]
+    return x_vals, y_vals, labels
+
+base_path = os.getcwd()
+model = gensim.models.Word2Vec.load(base_path+"/hw/static/assets/model/v2c_cbow_s100e25_new.model")
+total = 0
+for i in model.wv.key_to_index:
+  total = total + model.wv.get_vecattr(i, "count")
+
+
 
 def fromcloud():
 	info = {}
@@ -177,4 +204,68 @@ def showcntxt(fn_pg, key):
 	info['top24'] = str_words.replace("'", '"')
 	info['found'] = str(found)
 	return info
+
+def DashBoard(txt):
+	#model is a dict
+	ps = PorterStemmer()
+	img = ''''''
+	lukup = txt
+	name = []
+	rate = []
+	typs = []
+	zoom = []
+	if txt == '-info' or txt == '-chk' or txt == '-nxt':
+		total = 0
+		fp = open(base_path+"/hw/static/assets/docs/info", "r")
+		in4 = fp.read()
+		fp.close()
+		in4 = ast.literal_eval(in4)
+		for i in model.wv.key_to_index:
+			total = total + model.wv.get_vecattr(i, "count")
+		ct = 0
+		for key, value in in4.items():
+			name.append(key)
+			rate.append(float("{:.5f}".format((value/total)*100)))
+			zoom.append(float("{:.2f}".format(value/total))*100)
+			ct = ct + 1
+			if ct == 10:
+				break;
+		lukup = "INFOMATION(%)"
+	else:
+		try:
+			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
+			for i in range(10):
+				name.append(ans[i][0])
+				rate.append(float("{:.5f}".format(ans[i][1])))
+				zoom.append(float("{:.2f}".format(ans[i][1]))*100)
+		except:
+			lukup = txt + " not found in Word2Vec model!"
+
+	for i in rate:
+		if i <= 0.4:
+			typs.append('bg-danger')
+		elif i > 0.4 and i < 0.8:
+			typs.append('bg-warning')
+		else:
+			typs.append('bg-success')
+	if txt == '-info':
+		img = '''/static/assets/img/all.png'''
+	elif txt == "-chk":
+		img = '''/static/assets/img/rank.png'''
+	elif txt == "-nxt":
+		img = ''''''
+	else:
+		try:
+			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
+			img = '''/static/assets/img/'''+ps.stem(txt)+'''.png'''
+			print(img)
+			if not os.path.isfile(base_path+"/hw/"+img):
+				img = ""
+				print("----"+txt+" img file is not exist.")
+		except Exception as e:
+			img = ""
+			print(e)
+	info = zip(name, rate, typs, zoom)
+	cntxt = {'txt': lukup, 'img': img, 'info': info}
+	return cntxt
 

@@ -29,3 +29,13 @@ def docs(request):
 
 def detail(reauest, q_id):
 	return HttpResponse("You're looking at question %s."% q_id)
+
+def stat(request):
+	if 'text' in request.GET:
+		text = request.GET['text']
+		if text == "":
+			text = "-info"
+	else:
+		text = "-info"
+	cntxt = mod.DashBoard(text)
+	return render(request, 'hw/statictis.html', cntxt)
