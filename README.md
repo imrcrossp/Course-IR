@@ -3,7 +3,7 @@
 
 > - Add a button for the new site about statistics.
 > - In that site, including CBOW/SG and some graphs, showing the cosine similarity of words.
-> - Using -sg flag in searching text, the result will created by skip-gram algorithm, otherwise, it will run in CBOW mode.
+> - Using -sg flag in searching text, the result will be created by skip-gram algorithm, otherwise, it will run in CBOW mode.
 
 ##### Overview
 > ###### v3.
