@@ -2,11 +2,12 @@
 ## New Features 
 
 > - Add a button for the new site about statistics.
-> - In that site, including CBOW and some graphs, showing the cosine similarity of words.
+> - In that site, including CBOW/SG and some graphs, showing the cosine similarity of words.
+> - Using -sg flag in searching text, the result will created by skip-gram algorithm, otherwise, it will run in CBOW mode.
 
 ##### Overview
 > ###### v3.
->  - CBOW and some graphs, showing the cosine similarity of words.
+>  - CBOW/SG and some graphs, showing the cosine similarity of words.
 > ###### v2.
 >  - Zipf Distribution computation, matching (or partial matching) process.
 > ###### v1.
