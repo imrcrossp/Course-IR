@@ -14,6 +14,7 @@ import gensim.models
 from gensim import utils
 from sklearn.decomposition import IncrementalPCA
 from sklearn.manifold import TSNE
+import re
 
 ## Init
 def reduce_dimensions(model):
@@ -36,6 +37,7 @@ model = gensim.models.Word2Vec.load(base_path+"/hw/static/assets/model/v2c_cbow_
 total = 0
 for i in model.wv.key_to_index:
   total = total + model.wv.get_vecattr(i, "count")
+sg_model = gensim.models.Word2Vec.load(base_path+"/hw/static/assets/model/v2c_sg_s100e25_new.model")
 
 
 
@@ -232,8 +234,14 @@ def DashBoard(txt):
 				break;
 		lukup = "INFOMATION(%)"
 	else:
+		if("-sg" in lukup):
+			FLAG = re.compile('[\ ]*-sg')
+			txt = FLAG.sub("", txt)
+			dummy = sg_model
+		else:
+			dummy = model
 		try:
-			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
+			ans = dummy.wv.most_similar([ps.stem(txt)], topn=10)
 			for i in range(10):
 				name.append(ans[i][0])
 				rate.append(float("{:.5f}".format(ans[i][1])))
@@ -256,8 +264,11 @@ def DashBoard(txt):
 		img = ''''''
 	else:
 		try:
-			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
-			img = '''/static/assets/img/'''+ps.stem(txt)+'''.png'''
+			ans = dummy.wv.most_similar([ps.stem(txt)], topn=10)
+			if("-sg" in lukup):
+				img = '''/static/assets/img/'''+ps.stem(txt)+'''_sg.png'''
+			else:
+				img = '''/static/assets/img/'''+ps.stem(txt)+'''.png'''
 			print(img)
 			if not os.path.isfile(base_path+"/hw/"+img):
 				img = ""
