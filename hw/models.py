@@ -14,30 +14,29 @@ import gensim.models
 from gensim import utils
 from sklearn.decomposition import IncrementalPCA
 from sklearn.manifold import TSNE
-import re
+import statistics 
 
 ## Init
 def reduce_dimensions(model):
-    num_dimensions = 2  # final num dimensions (2D, 3D, etc)
+	num_dimensions = 2  # final num dimensions (2D, 3D, etc)
 
-    # extract the words & their vectors, as numpy arrays
-    vectors = np.asarray(model.wv.vectors)
-    labels = np.asarray(model.wv.index_to_key)  # fixed-width numpy strings
+	# extract the words & their vectors, as numpy arrays
+	vectors = np.asarray(model.wv.vectors)
+	labels = np.asarray(model.wv.index_to_key)  # fixed-width numpy strings
 
-    # reduce using t-SNE
-    tsne = TSNE(n_components=num_dimensions, random_state=0)
-    vectors = tsne.fit_transform(vectors)
+	# reduce using t-SNE
+	tsne = TSNE(n_components=num_dimensions, random_state=0)
+	vectors = tsne.fit_transform(vectors)
 
-    x_vals = [v[0] for v in vectors]
-    y_vals = [v[1] for v in vectors]
-    return x_vals, y_vals, labels
+	x_vals = [v[0] for v in vectors]
+	y_vals = [v[1] for v in vectors]
+	return x_vals, y_vals, labels
 
 base_path = os.getcwd()
 model = gensim.models.Word2Vec.load(base_path+"/hw/static/assets/model/v2c_cbow_s100e25_new.model")
 total = 0
 for i in model.wv.key_to_index:
   total = total + model.wv.get_vecattr(i, "count")
-sg_model = gensim.models.Word2Vec.load(base_path+"/hw/static/assets/model/v2c_sg_s100e25_new.model")
 
 
 
@@ -234,14 +233,8 @@ def DashBoard(txt):
 				break;
 		lukup = "INFOMATION(%)"
 	else:
-		if("-sg" in lukup):
-			FLAG = re.compile('[\ ]*-sg')
-			txt = FLAG.sub("", txt)
-			dummy = sg_model
-		else:
-			dummy = model
 		try:
-			ans = dummy.wv.most_similar([ps.stem(txt)], topn=10)
+			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
 			for i in range(10):
 				name.append(ans[i][0])
 				rate.append(float("{:.5f}".format(ans[i][1])))
@@ -264,11 +257,8 @@ def DashBoard(txt):
 		img = ''''''
 	else:
 		try:
-			ans = dummy.wv.most_similar([ps.stem(txt)], topn=10)
-			if("-sg" in lukup):
-				img = '''/static/assets/img/'''+ps.stem(txt)+'''_sg.png'''
-			else:
-				img = '''/static/assets/img/'''+ps.stem(txt)+'''.png'''
+			ans = model.wv.most_similar([ps.stem(txt)], topn=10)
+			img = '''/static/assets/img/'''+ps.stem(txt)+'''.png'''
 			print(img)
 			if not os.path.isfile(base_path+"/hw/"+img):
 				img = ""
@@ -280,3 +270,185 @@ def DashBoard(txt):
 	cntxt = {'txt': lukup, 'img': img, 'info': info}
 	return cntxt
 
+def calc_idfmtx(func4idf, idf_count, tw, ts):
+	mtx = [0]*tw
+	for idx, freq in enumerate(idf_count['_idf']):
+		mtx[idx] = abs(func4idf(ts, freq))
+	return mtx
+
+def text_prepare(strr):
+	import re
+	strr = strr.lower()
+	REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
+	BAD_SYMBOLS_RE = re.compile('[^a-z\ ]')
+	STOPWORDS = set(nltk.corpus.stopwords.words('english'))
+
+	strr = REPLACE_BY_SPACE_RE.sub(" ", strr)
+	strr = BAD_SYMBOLS_RE.sub("", strr)
+	sent = " ".join([w for w in nltk.word_tokenize(strr) if w not in STOPWORDS]) 
+	return sent
+
+def calc_tf(func4tf, keys, remtx, text, tw, functype = 0):
+	dyfreq = [0]*tw 
+	text = text_prepare(text)
+	for _old, new_ in zip(remtx['old'], remtx['new']):
+		dystr = text.replace(_old, new_)
+	dytoken = nltk.word_tokenize(dystr)
+	for idx, i in enumerate(dytoken):
+		for _old, new_ in zip(remtx['old'], remtx['new']):
+			if i == new_:
+				dytoken[idx] = _old
+	for i in dytoken:
+		tmp = keys.index[(keys['keys'] == i)].tolist()
+		if len(tmp) == 1:
+			dyfreq[tmp[0]] = dyfreq[tmp[0]]+1
+		else:
+			print(i)
+	valy = 0
+	if functype == 2:
+		for i in dyfreq:
+			if i > valy:
+				valy = i
+			print(valy)
+	else:
+		valy = len(dytoken)
+	for i in range(tw):
+		dyfreq[i] = func4tf(dyfreq[i], valy)
+	return dyfreq, dytoken
+
+def calc_buff(text, keys, remtx, tw):
+	mtx = [0]*tw
+	text = text_prepare(text)
+	for _old, new_ in zip(remtx['old'], remtx['new']):
+		dystr = text.replace(_old, new_)
+	dytoken = nltk.word_tokenize(dystr)
+	for idx, i in enumerate(dytoken):
+		for _old, new_ in zip(remtx['old'], remtx['new']):
+			if i == new_:
+				dytoken[idx] = _old
+	for i in dytoken:
+		tmp = keys.index[(keys['keys'] == i)].tolist()
+		if len(tmp) == 1:
+			mtx[tmp[0]] = 2
+	tko = nltk.pos_tag(dytoken)
+	total = 0
+	for i, j in tko:
+		idx = keys.index[(keys['keys'] == i)].tolist()
+		if len(idx) == 1:
+			# if j == "NN" or j == "NNS":
+			# 	total = total + 2
+			# elif j == "JJ" or j == "JJS" or j == "JJR" or j == "RB " or j == "RBE" or j == "RBS":
+			# 	total = total + 10
+			# elif j == "VB" or j == "VBN" or j == "VBD":
+			# 	total = total + 5
+			# else:
+			total = total + 1
+	for i, j in tko:
+		idx = keys.index[(keys['keys'] == i)].tolist()
+		if len(idx) == 1:
+			# if j == "NN" or j == "NNS":
+			# 	mtx[idx[0]] = 2*len(tko)/total
+			# elif j == "JJ" or j == "JJS" or j == "JJR" or j == "RB " or j == "RBE" or j == "RBS":
+			# 	mtx[idx[0]] = 10*len(tko)/total
+			# elif j == "VB" or j == "VBN" or j == "VBD":
+			# 	mtx[idx[0]] = 5*len(tko)/total
+			# else:
+			mtx[idx[0]] = len(tko)/total
+			print(i, j)
+	q = 0
+	for i in mtx:
+		q = q + i
+
+	print(q)
+	return mtx
+
+def sort_cossim(text, ttf, tidf):
+	from numpy import dot
+	from numpy.linalg import norm
+	result = {}
+	cntxt = []
+	cossim = []
+	varset = []
+	tfchecked = ["", "", ""]
+	idfchecked = ["", "", ""]
+
+	tf_nat = lambda x, y: x/y
+	tf_log = lambda x, y: math.log(1+x)
+	tf_aug = lambda x, y: 0.5+0.5*((x)/(y))
+	'''------------------------------------'''
+	idf_nat = lambda x, y: math.log(x/(1+y))
+	idf_smt = lambda x, y: math.log(x/(1+y))+1
+	idf_pro = lambda x, y: math.log((x-y)/(1+y))
+	if ttf == 1:
+		tf_func = tf_log
+		tfchecked[1] = "checked"
+	elif ttf == 2:
+		tf_func = tf_aug
+		tfchecked[2] = "checked"
+	else:
+		tf_func = tf_nat
+		tfchecked[0] = "checked"
+	if tidf == 1:
+		idf_func = idf_smt
+		idfchecked[1] = "checked"
+	elif tidf == 2:
+		idf_func = idf_pro
+		idfchecked[2] = "checked"
+	else:
+		idf_func = idf_nat
+		idfchecked[0] = "checked"
+	if text_prepare(text) == "":
+		return cntxt, cossim, varset, text, tfchecked, idfchecked
+
+	tf = pd.read_csv(base_path+"/hw/static/assets/docs/tfidf/tf.csv")
+	dfidf_count = pd.read_csv(base_path+"/hw/static/assets/docs/tfidf/idf_count.csv") 
+	dfremtx = pd.read_csv(base_path+"/hw/static/assets/docs/tfidf/dict.csv")
+	dfkeys = pd.read_csv(base_path+"/hw/static/assets/docs/tfidf/keys.csv")
+	dfbook = pd.read_csv(base_path+"/hw/static/assets/docs/tfidf/book.csv")
+	ts = int(tf['freq'][1])
+	tw = int(tf['freq'][2])
+	idfmtx = calc_idfmtx(idf_func, dfidf_count, tw, ts)
+	Amtx, token = calc_tf(tf_func, dfkeys, dfremtx, text,  tw, ttf)
+
+	Awei = np.multiply(Amtx, idfmtx)
+	for i, j in enumerate(Awei):
+		if j > 0:
+			print(i, j)
+	#Abuff = calc_buff(text, dfkeys, dfremtx, tw)
+	#Awei = np.multiply(Awei, Abuff)
+	for i in range(ts):
+		sent = dfbook['processed'][i]
+		flag = True
+		for j in token:
+			if sent.find(j) == -1:
+				flag = False
+				break
+		if flag == False:
+			continue
+		Bmtx, tmp = calc_tf(tf_func, dfkeys, dfremtx, sent, tw, ttf)
+		Bwei = np.multiply(Bmtx, idfmtx)
+		if norm(Awei) == 0:
+			angle = 0
+		else:
+			angle = dot(Awei, Bwei)/(norm(Awei)*norm(Bwei))
+		result[i] = angle
+	result = sorted(result.items(), key=lambda x:x[1], reverse = True)
+	leng = len(result)
+	if leng > 1:
+		total = 0
+		tmp = [j for i, j in result]
+		var = statistics.variance(tmp)
+		for i, j in result:
+			total = total + j
+		total = total/leng
+		for idx, val in result:
+			cntxt.append(dfbook['nonprocessed'][idx])
+			cossim.append(float("{:.5f}".format((val))))
+			varset.append(float("{:.5f}".format((val-total)/np.sqrt(var))))
+	elif leng == 1:
+		for idx, val in result:
+			cntxt.append(dfbook['nonprocessed'][idx])
+			cossim.append(float("{:.5f}".format((val))))
+			varset.append(float("{:.5f}".format(100)))
+	sent = text
+	return cntxt, cossim, varset, sent, tfchecked, idfchecked

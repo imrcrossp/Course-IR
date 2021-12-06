@@ -39,3 +39,16 @@ def stat(request):
 		text = "-info"
 	cntxt = mod.DashBoard(text)
 	return render(request, 'hw/statictis.html', cntxt)
+
+def tfidf(request):
+	text = ""
+	tf = -1
+	idf = -1
+	if request.method == 'POST':
+		text = request.POST['text']
+		tf = int(request.POST['tf'])
+		idf = int(request.POST['idf'])
+	sents, cosval, varset, splist, tftype, idftype  = mod.sort_cossim(text, tf, idf)
+	rank = zip(sents, cosval, varset)
+	cntxt = {'rank': rank, 'info': splist, 'tf': tftype, 'idf': idftype}
+	return render(request, 'hw/tfidf.html', cntxt)

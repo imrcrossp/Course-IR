@@ -2,12 +2,11 @@
 ## New Features 
 
 > - Add a button for the new site about statistics.
-> - In that site, including CBOW/SG and some graphs, showing the cosine similarity of words.
-> - Using -sg flag in searching text, the result will be created by skip-gram algorithm, otherwise, it will run in CBOW mode.
+> - In that site, including CBOW and some graphs, showing the cosine similarity of words.
 
 ##### Overview
 > ###### v3.
->  - CBOW/SG and some graphs, showing the cosine similarity of words.
+>  - CBOW and some graphs, showing the cosine similarity of words.
 > ###### v2.
 >  - Zipf Distribution computation, matching (or partial matching) process.
 > ###### v1.
@@ -25,10 +24,9 @@
 >>>\> pip3 install nltk <br>
 >>>\> python3 <br>
 >>>\>>> import nltk <br>
->>>\>>> nltk.download("popular")<br>
+>>>\>>> nltk.download("popular")
 >>>\> pip install -r requirements.txt
 > - 安裝 django
-> - ./init_key
 > -  python manage.py migrate 
 > -  python manage.py runserver [ip:port]
 

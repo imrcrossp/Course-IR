@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>IR Homework</title>
+    <link rel="stylesheet" href="{% static 'css/online/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="icon" href="{% static 'assets/favicon.ico' %}"size="any" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/simple-line-icons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
+</head>
+
+<body id="page-top" style="background-image:url({% static 'assets/img/portfolio-2.jpg' %}); background-attachment: fixed;
+  background-size: 50% 50%;">
+    <header>
+        <div id="wrapper">
+            <div class="d-flex flex-column" id="content-wrapper">
+                <div id="content">
+                    <form class="navbar-search" action="/hw/tfidf" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-10">
+                                <nav class="navbar navbar-light navbar-expand bg-white shadow topbar static-top">
+                                    <!-- <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button> -->
+                                        {% if info == "" %}
+                                        <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ..." name="text" style="margin-left: 1rem;"><button class="btn btn-primary py-0" type="submit" style="margin-right: 1rem;"><i class="fas fa-search"></i></button></div>
+                                        {% else %}
+                                        <div class="input-group"><input class="bg-light form-control border-0 small" value = "{{ info }}"type="text" name="text" style="margin-left: 1rem;"><button class="btn btn-primary py-0" type="submit" style="margin-right: 1rem;"><i class="fas fa-search"></i></button></div>
+                                        {% endif %}
+                                </nav>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>   
+                        <div class="container-fluid">
+                            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                            </div>
+                            <div class="row" style="margin-bottom: 0.5rem">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-8" style="margin-bottom: 1em;">
+                                    <div class="card shadow border-start-success py-2">
+                                        <div class="card-header py-3">
+                                            <h6 class="text-primary fw-bold m-0">Method</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                </div>
+                                                <div class="col-5" style="margin-bottom: 1em;">
+                                                    <fieldset style="text-align: center;">
+                                                        <legend style="text-align: center;">TF Scheme</legend>
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_tf_tf" name="tf" type="radio" value="0" {{tf.0}} required> Frequency</label>
+                                                    
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_tf_log" name="tf" type="radio" value="1" {{tf.1}} required> Log Norm</label>
+                                                    
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_tf_dbl" name="tf" type="radio" value="2" {{tf.2}} required> Dbl Norm 0.5</label>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-5" style="margin-bottom: 1em;">
+                                                    <fieldset style="text-align: center;">
+                                                        <legend style="text-align: center;">IDF Scheme</legend>
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_idf_frq" name="idf" type="radio" value="0" {{idf.0}} required> Frequency</label>
+                                                    
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_idf_smt" name="idf" type="radio" value="1" {{idf.1}} required> Smooth</label>
+                                                    
+                                                        <label for="tf" style="margin-right: 0.5rem;"><input id="id_idf_prb" name="idf" type="radio" value="2" {{idf.2}} required> Probabilistic</label>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="col-1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 1em;">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card shadow border-start-success py-2">
+                                        <div class="card-header py-3" style="padding-bottom: 0rem;">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <h5 class="text-primary fw-bold m-0">
+                                                        Result
+                                                    </h5>
+                                                </div>
+                                                <!-- <div class="col-9">
+                                                    <div>
+                                                        <p style="margin-bottom: 0rem;">
+                                                            
+                                                        </p>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        {%for sent in rank%}
+                                            {% if sent.2 > -1 %}
+                                                {% if sent.2 == 100 %}
+                                                    <div class="row">
+                                                        <div class="col-2 offset-10" style="text-align: left; padding-right: 0rem; padding-top: 0.5rem;">
+                                                            Score: {{ sent.1 }}
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="row">
+                                                        <div class="col-3 offset-9" style="text-align: left; padding-right: 0rem; padding-top: 0.5rem;">
+                                                            Score: {{ sent.1 }} / {{ sent.2 }}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if sent.2 > 2 %}
+                                                    <div class="card text-white bg-success" style="margin-right: 2rem; margin-left: 2rem;">
+                                                        <div class="card-body" style="padding-right:2rem; padding-left: 2rem; padding-bottom: 0rem; padding-top: 0rem;">
+                                                                {{ sent.0 }} 
+                                                        </div>
+                                                    </div>
+                                                {% elif sent.2 > 1 %}
+                                                    <div class="card text-white bg-info" style="margin-right: 2rem; margin-left: 2rem;">
+                                                        <div class="card-body" style="padding-right:2rem; padding-left: 2rem; padding-bottom: 0rem; padding-top: 0rem;">
+                                                                {{ sent.0 }}
+                                                        </div>
+                                                    </div>
+                                                {% elif sent.2 > 0 %}
+                                                    <div class="card bg-warning" style="margin-right: 2rem; margin-left: 2rem;">
+                                                        <div class="card-body" style="padding-right:2rem; padding-left: 2rem; padding-bottom: 0rem; padding-top: 0rem;">
+                                                                {{ sent.0 }}
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="card bg-light" style="margin-right: 2rem; margin-left: 2rem;">
+                                                        <div class="card-body" style="padding-right:2rem; padding-left: 2rem; padding-bottom: 0rem; padding-top: 0rem;">
+                                                                {{ sent.0 }}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-7 col-xl-8">
+                                    <div class="card shadow mb-4"></div>
+                                </div>
+                                <div class="col-lg-5 col-xl-4">
+                                    <div class="card shadow mb-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <footer class="footer text-center" style="padding-top: 5px;">
+            <div class="container">
+                <ul class="list-inline mb-2">
+                    <li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://www.facebook.com/imrcrossp/" target="_blank"><i class="icon-social-facebook"></i></a></li>
+                    <li class="list-inline-item">&nbsp;<a class="link-light social-link rounded-circle" href="https://github.com/imrcrossp" target="_black"><i class="icon-social-github"></i></a></li>
+                </ul>
+                <p class="text-muted mb-0 small">Copyright &nbsp;© Yen's 2021</p>
+            </div>
+            <a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a>
+        </footer>
+    </section>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/bs-init.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/stylish-portfolio.js' %}"></script>
+    <script src="{% static 'js/tfidf.js' %}"></script>
+</body>
+
+</html>
